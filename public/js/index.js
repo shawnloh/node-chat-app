@@ -9,8 +9,32 @@ socket.on('disconnect', function() {
 });
 
 socket.on('newMessage', function(data) {
-  console.log('New message received!');
-  console.log('From:', data.from);
-  console.log('Text:', data.text);
-  console.log('Created at:', data.createdAt);
+  console.log('New message received!', data);
+  const li = jQuery('<li></li>');
+  li.text(`${data.from}: ${data.text}`);
+  jQuery('#messages').append(li);
+});
+
+socket.emit(
+  'createMessage',
+  {
+    from: 'Frank',
+    text: 'Hi'
+  },
+  function(data) {
+    console.log('Got it!', data);
+  }
+);
+
+jQuery('#message-form').on('submit', function(e) {
+  e.preventDefault();
+
+  socket.emit(
+    'createMessage',
+    {
+      from: 'User',
+      text: jQuery('[name=message]').val()
+    },
+    function() {}
+  );
 });

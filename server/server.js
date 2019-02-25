@@ -29,16 +29,10 @@ io.on('connection', socket => {
     generateMessage('Admin', 'A new user has joined the chat')
   );
 
-  socket.on('createMessage', message => {
-    console.log('create a new message');
-    console.log('From:', message.from);
-    console.log('Text:', message.text);
+  socket.on('createMessage', (message, callback) => {
+    console.log('create a new message', message);
     io.emit('newMessage', generateMessage(message.from, message.text));
-    // socket.broadcast.emit('newMessage', {
-    //   from: message.from,
-    //   text: message.text,
-    //   createdAt: new Date().getTime()
-    // });
+    callback('This is from the server');
   });
 });
 
